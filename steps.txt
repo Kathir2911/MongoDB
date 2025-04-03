@@ -443,3 +443,135 @@ Exercise-1> db.Products.deleteMany({price:{$lt:25}});
 17) Delete all documents in a collection
 db.users.deleteMany({})
 
+17) FIND ORDERS WITH PRICE BETWEEN 121 TO 500
+Exercise-1> db.Products.find({ price: { $gte: 121, $lte: 500 } });
+... 
+[
+  {
+    _id: ObjectId('67ee0e92d5b35e1b0e6b140f'),
+    p_id: 103,
+    name: 'Carrot',
+    price: 125,
+    category: 'Vegetables',
+    stock: 75
+  },
+  {
+    _id: ObjectId('67ee0e92d5b35e1b0e6b1410'),
+    p_id: 104,
+    name: 'Notebook',
+    price: 150,
+    category: 'Stationery',
+    stock: 30
+  },
+  {
+    _id: ObjectId('67ee0e92d5b35e1b0e6b1411'),
+    p_id: 105,
+    name: 'Mouse',
+    price: 500,
+    category: 'Electronics',
+    stock: 15
+  }
+]
+
+18) FIND USERS WHOSE NAME IS EITHER KATHIR OR JEEVA (i.e.) IF ANY OF THEM IS NOT PRESENT IT DOESN'T CREATE ANY ERROR
+Exercise-1> db.Users.find({name:{$in:["Kathir","Jeeva","Ganesan"]}});
+[
+  {
+    _id: ObjectId('67ee0db1d5b35e1b0e6b140b'),
+    name: 'Kathir',
+    city: 'Paramakudi',
+    age: 34
+  },
+  {
+    _id: ObjectId('67ee0db1d5b35e1b0e6b140c'),
+    u_id: 2,
+    name: 'Jeeva',
+    city: 'Paramakudi'
+  }
+]
+HERE GANESAN NOT PRESENT SINCE THERE IS NO LOG LIKE THAT
+
+19)FIND THE NAMES OF ALL WHOSE NAME IS NOT KATHIR
+Exercise-1> db.Users.find({name:{$ne:"Kathir"}});
+[
+  {
+    _id: ObjectId('67ee0db1d5b35e1b0e6b140c'),
+    u_id: 2,
+    name: 'Jeeva',
+    city: 'Paramakudi'
+  },
+  {
+    _id: ObjectId('67ee0db1d5b35e1b0e6b140d'),
+    u_id: 3,
+    name: 'Arun',
+    city: 'Chennai'
+  },
+  {
+    _id: ObjectId('67ee0db1d5b35e1b0e6b140e'),
+    u_id: 4,
+    name: 'Mohan',
+    city: 'Coimbatore'
+  },
+  {
+    _id: ObjectId('67ee0db1d5b35e1b0e6b140f'),
+    u_id: 5,
+    name: 'Ravi',
+    city: 'Trichy'
+  }
+]
+
+20) IF I WANT TO EXCLUDE _id in it
+Exercise-1> db.Users.find({name:{$ne:"Kathir"}},{_id:0});
+[
+  { u_id: 2, name: 'Jeeva', city: 'Paramakudi' },
+  { u_id: 3, name: 'Arun', city: 'Chennai' },
+  { u_id: 4, name: 'Mohan', city: 'Coimbatore' },
+  { u_id: 5, name: 'Ravi', city: 'Trichy' }
+]
+
+21) FIND USERS WHERE AGE IS NOT SPECIFIED
+...AGE IS NOT PRESENT IN ID 1...
+Exercise-1> db.Users.find({age:{$exists:false}});
+[
+  {
+    _id: ObjectId('67ee0db1d5b35e1b0e6b140c'),
+    u_id: 2,
+    name: 'Jeeva',
+    city: 'Paramakudi'
+  },
+  {
+    _id: ObjectId('67ee0db1d5b35e1b0e6b140d'),
+    u_id: 3,
+    name: 'Arun',
+    city: 'Chennai'
+  },
+  {
+    _id: ObjectId('67ee0db1d5b35e1b0e6b140e'),
+    u_id: 4,
+    name: 'Mohan',
+    city: 'Coimbatore'
+  },
+  {
+    _id: ObjectId('67ee0db1d5b35e1b0e6b140f'),
+    u_id: 5,
+    name: 'Ravi',
+    city: 'Trichy'
+  }
+]
+
+22) FIND USERS WHERE CITY IS NOT SPECIFIED
+...ALL THE USERS HAVE CITY SPECIFIED...
+Exercise-1> db.Users.find({city:{$exists:false}});
+
+23) FIND USERS WHERE AGE IS SPECIFIED
+Exercise-1> db.Users.find({age:{$exists:true}});
+[
+  {
+    _id: ObjectId('67ee0db1d5b35e1b0e6b140b'),
+    name: 'Kathir',
+    city: 'Paramakudi',
+    age: 34
+  }
+]
+
+24) FIND USERS WHOSE CITY CONTAINS "RE" (CASE-INSENSITIVE)

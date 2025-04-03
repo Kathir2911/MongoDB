@@ -575,3 +575,25 @@ Exercise-1> db.Users.find({age:{$exists:true}});
 ]
 
 24) FIND USERS WHOSE CITY CONTAINS "RE" (CASE-INSENSITIVE)
+Exercise-1> db.Users.find({city:{$regex:"re",$options:"i"}});
+[
+  {
+    _id: ObjectId('67ee0db1d5b35e1b0e6b140e'),
+    u_id: 4,
+    name: 'Mohan',
+    city: 'Coimbatore'
+  }
+]
+
+25) FIND USERS WHOSE NAME CONTAINS "KA" (CASE-INSENSITITVE)
+Exercise-1> db.Users.find({name:{$regex:"ka",$options:"i"}});
+[
+  {
+    _id: ObjectId('67ee0db1d5b35e1b0e6b140b'),
+    name: 'Kathir',
+    city: 'Paramakudi',
+    age: 34
+  }
+]
+
+26) 

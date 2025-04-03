@@ -285,5 +285,161 @@ db.Users.deleteOne({u_id:1});
 8) DELETE AN ORDER IF CANCELLED
 db.Orders.deleteOne({o_id: 1005});
 
+SEARCH AND FILTERING
+9) FIND ORDERS WHERE STATUS IS PENDING
+Exercise-1> db.Orders.find({status:"Pending"});
+[
+  {
+    _id: ObjectId('67ee0f9ad5b35e1b0e6b1412'),
+    o_id: 1010,
+    u_id: 1,
+    p_id: 2,
+    qty: 1,
+    status: 'Pending'
+  },
+  {
+    _id: ObjectId('67ee0f9ad5b35e1b0e6b1414'),
+    o_id: 1020,
+    u_id: 5,
+    p_id: 104,
+    qty: 4,
+    status: 'Pending'
+  }
+]
 
+10) FIND PRODUCTS WITH PRICE GREATER THAN OR EQUAL TO 25
+Exercise-1> db.Products.find({price:{$gte:25}});
+[
+  {
+    _id: ObjectId('67ee0e92d5b35e1b0e6b140e'),
+    p_id: 102,
+    name: 'Headphone',
+    price: 500,
+    category: 'Electronics',
+    stock: 10
+  },
+  {
+    _id: ObjectId('67ee0e92d5b35e1b0e6b140f'),
+    p_id: 103,
+    name: 'Carrot',
+    price: 25,
+    category: 'Vegetables',
+    stock: 75
+  },
+  {
+    _id: ObjectId('67ee0e92d5b35e1b0e6b1410'),
+    p_id: 104,
+    name: 'Notebook',
+    price: 50,
+    category: 'Stationery',
+    stock: 30
+  },
+  {
+    _id: ObjectId('67ee0e92d5b35e1b0e6b1411'),
+    p_id: 105,
+    name: 'Mouse',
+    price: 400,
+    category: 'Electronics',
+    stock: 15
+  }
+]
+
+11) FIND USERS WHOSE NAME STARTS WITH "K"
+Exercise-1> db.Users.find({name:/^K/});
+[
+  {
+    _id: ObjectId('67ee0db1d5b35e1b0e6b140b'),
+    u_id: 1,
+    name: 'Kathir',
+    city: 'Madurai'
+  }
+]
+
+12) FIND USERS WHO NAME ENDS WITH "r"
+Exercise-1> db.Users.find({name:/r$/});
+[
+  {
+    _id: ObjectId('67ee0db1d5b35e1b0e6b140b'),
+    u_id: 1,
+    name: 'Kathir',
+    city: 'Madurai'
+  }
+]
+
+13) FIND WITH PROJECTS SHOW ONLY NAME AND CITY, EXCLUDE ID ALSO
+WITH ID
+Exercise-1> db.Users.find({},{name:1,city:1});
+[
+  {
+    _id: ObjectId('67ee0db1d5b35e1b0e6b140b'),
+    name: 'Kathir',
+    city: 'Madurai'
+  },
+  {
+    _id: ObjectId('67ee0db1d5b35e1b0e6b140c'),
+    name: 'Jeeva',
+    city: 'Paramakudi'
+  },
+  {
+    _id: ObjectId('67ee0db1d5b35e1b0e6b140d'),
+    name: 'Arun',
+    city: 'Chennai'
+  },
+  {
+    _id: ObjectId('67ee0db1d5b35e1b0e6b140e'),
+    name: 'Mohan',
+    city: 'Coimbatore'
+  },
+  {
+    _id: ObjectId('67ee0db1d5b35e1b0e6b140f'),
+    name: 'Ravi',
+    city: 'Trichy'
+  }
+]
+EXCLUDE ID
+Exercise-1> db.Users.find({},{name:1,city:1,_id:0});
+[
+  { name: 'Kathir', city: 'Madurai' },
+  { name: 'Jeeva', city: 'Paramakudi' },
+  { name: 'Arun', city: 'Chennai' },
+  { name: 'Mohan', city: 'Coimbatore' },
+  { name: 'Ravi', city: 'Trichy' }
+]
+
+14) UPDATE MULTIPLE DOCUMENTS ( ONLY USE WHEN WE NEED TO CHANGE A PARTICULAR VALUE IN ALL THE ROWS )
+Exercise-1> db.Products.updateMany({},{$inc:{price:100}});
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 5,
+  modifiedCount: 5,
+  upsertedCount: 0
+}
+
+15) REPLACE AN ENTIRE DOCUMENT (COMBINATION OF INSERT AND UPDATE)
+CHANGE MY CITY TO PARAMAKUDI AND ADD AN COLUMN KNOWN AS AGE
+Exercise-1> db.Users.replaceOne({name:"Kathir"},{name:"Kathir",city:"Paramakudi",age:34});
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+Exercise-1> db.Users.find({name:"Kathir"});
+[
+  {
+    _id: ObjectId('67ee0db1d5b35e1b0e6b140b'),
+    name: 'Kathir',
+    city: 'Paramakudi',
+    age: 34
+  }
+]
+
+16) USE OF DELETEMANY TO DELETE PRODUCTS WHOSE PRICE LESS THAN 26
+Exercise-1> db.Products.deleteMany({price:{$lt:25}});
+{ acknowledged: true, deletedCount: 0 }
+
+17) Delete all documents in a collection
+db.users.deleteMany({})
 

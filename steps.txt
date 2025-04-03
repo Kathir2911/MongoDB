@@ -1,0 +1,289 @@
+1) TO CREATE THE DATABASE
+test> use Exercise-1;
+switched to db Exercise-1
+
+TO CREATE THE COLLECTIONS
+Exercise-1> db.createCollection("Users");
+{ ok: 1 }
+Exercise-1> db.createCollection("Products");
+{ ok: 1 }
+Exercise-1> db.createCollection("Orders");
+{ ok: 1 }
+Exercise-1> db.createCollection("Payments");
+{ ok: 1 }
+
+2) INSERT THE ATTRIBUTE AND ITS VALUES
+db.Users.insertMany([
+  { "u_id": 1, "name": "Kathir", "city": "Madurai" },
+  { "u_id": 2, "name": "Jeeva", "city": "Paramakudi" },
+  { "u_id": 3, "name": "Arun", "city": "Chennai" },
+  { "u_id": 4, "name": "Mohan", "city": "Coimbatore" },
+  { "u_id": 5, "name": "Ravi", "city": "Trichy" }
+]);
+db.Products.insertMany([
+  { "p_id": 101, "name": "Pen", "price": 20, "category": "Stationery", "stock": 25 },
+  { "p_id": 102, "name": "Headphone", "price": 500, "category": "Electronics", "stock": 10 },
+  { "p_id": 103, "name": "Carrot", "price": 25, "category": "Vegetables", "stock": 100 },
+  { "p_id": 104, "name": "Notebook", "price": 50, "category": "Stationery", "stock": 30 },
+  { "p_id": 105, "name": "Mouse", "price": 400, "category": "Electronics", "stock": 15 }
+]);
+db.Orders.insertMany([
+  { "o_id": 1000, "u_id": 2, "p_id": 101, "qty": 3, "status": "Pending" },
+  { "o_id": 1005, "u_id": 2, "p_id": 103, "qty": 25, "status": "Delivered" },
+  { "o_id": 1010, "u_id": 1, "p_id": 102, "qty": 1, "status": "Pending" },
+  { "o_id": 1015, "u_id": 3, "p_id": 101, "qty": 2, "status": "Shipped" },
+  { "o_id": 1020, "u_id": 5, "p_id": 104, "qty": 4, "status": "Pending" }
+]);
+db.Payments.insertMany([
+  { "pay_id": 29109, "o_id": 1000, "amount": 1000, "status": "Paid", "method": "UPI" },
+  { "pay_id": 34522, "o_id": 1005, "amount": 625, "status": "Paid", "method": "Net-banking" },
+  { "pay_id": 89231, "o_id": 1010, "amount": 345, "status": "Not-Paid", "method": "Cash" },
+  { "pay_id": 56218, "o_id": 1015, "amount": 40, "status": "Paid", "method": "UPI" },
+  { "pay_id": 90743, "o_id": 1020, "amount": 200, "status": "Pending", "method": "Card" }
+]);
+
+3) TO VIEW ALL THE USERS, ORDERS, PRODUCTS, PAYMENTS CREATED
+Exercise-1> db.Users.find();
+[
+  {
+    _id: ObjectId('67ee0db1d5b35e1b0e6b140b'),
+    u_id: 1,
+    name: 'Kathir',
+    city: 'Madurai'
+  },
+  {
+    _id: ObjectId('67ee0db1d5b35e1b0e6b140c'),
+    u_id: 2,
+    name: 'Jeeva',
+    city: 'Paramakudi'
+  },
+  {
+    _id: ObjectId('67ee0db1d5b35e1b0e6b140d'),
+    u_id: 3,
+    name: 'Arun',
+    city: 'Chennai'
+  },
+  {
+    _id: ObjectId('67ee0db1d5b35e1b0e6b140e'),
+    u_id: 4,
+    name: 'Mohan',
+    city: 'Coimbatore'
+  },
+  {
+    _id: ObjectId('67ee0db1d5b35e1b0e6b140f'),
+    u_id: 5,
+    name: 'Ravi',
+    city: 'Trichy'
+  }
+]
+Exercise-1> db.Products.find();
+[
+  {
+    _id: ObjectId('67ee0e92d5b35e1b0e6b140d'),
+    p_id: 101,
+    name: 'Pen',
+    price: 20,
+    category: 'Stationary',
+    stock: 25
+  },
+  {
+    _id: ObjectId('67ee0e92d5b35e1b0e6b140e'),
+    p_id: 102,
+    name: 'Headphone',
+    price: 500,
+    category: 'Electronics',
+    stock: 10
+  },
+  {
+    _id: ObjectId('67ee0e92d5b35e1b0e6b140f'),
+    p_id: 103,
+    name: 'Carrot',
+    price: 25,
+    category: 'Vegetables',
+    stock: 100
+  },
+  {
+    _id: ObjectId('67ee0e92d5b35e1b0e6b1410'),
+    p_id: 104,
+    name: 'Notebook',
+    price: 50,
+    category: 'Stationery',
+    stock: 30
+  },
+  {
+    _id: ObjectId('67ee0e92d5b35e1b0e6b1411'),
+    p_id: 105,
+    name: 'Mouse',
+    price: 400,
+    category: 'Electronics',
+    stock: 15
+  }
+]
+Exercise-1> db.Orders.find();
+[
+  {
+    _id: ObjectId('67ee0f9ad5b35e1b0e6b1410'),
+    o_id: 1000,
+    u_id: 2,
+    p_id: 101,
+    qty: 3,
+    status: 'Pending'
+  },
+  {
+    _id: ObjectId('67ee0f9ad5b35e1b0e6b1411'),
+    o_id: 1005,
+    u_id: 2,
+    p_id: 103,
+    qty: 25,
+    status: 'Delivered'
+  },
+  {
+    _id: ObjectId('67ee0f9ad5b35e1b0e6b1412'),
+    o_id: 1010,
+    u_id: 1,
+    p_id: 2,
+    qty: 1,
+    status: 'Pending'
+  },
+  {
+    _id: ObjectId('67ee0f9ad5b35e1b0e6b1413'),
+    o_id: 1015,
+    u_id: 3,
+    p_id: 101,
+    qty: 2,
+    status: 'Shipped'
+  },
+  {
+    _id: ObjectId('67ee0f9ad5b35e1b0e6b1414'),
+    o_id: 1020,
+    u_id: 5,
+    p_id: 104,
+    qty: 4,
+    status: 'Pending'
+  }
+]
+Exercise-1> db.Payments.find();
+[
+  {
+    _id: ObjectId('67ee1071d5b35e1b0e6b1413'),
+    pay_id: 29109,
+    o_id: 1000,
+    amount: 1000,
+    status: 'Paid',
+    method: 'UPI'
+  },
+  {
+    _id: ObjectId('67ee1071d5b35e1b0e6b1414'),
+    pay_id: 34522,
+    o_id: 1005,
+    amount: 625,
+    status: 'Paid',
+    method: 'Net-banking'
+  },
+  {
+    _id: ObjectId('67ee1071d5b35e1b0e6b1415'),
+    pay_id: 89231,
+    o_id: 1010,
+    amount: 345,
+    staud: 'Not-Paid',
+    method: 'Cash'
+  },
+  {
+    _id: ObjectId('67ee1071d5b35e1b0e6b1416'),
+    pay_id: 56218,
+    o_id: 1015,
+    amount: 40,
+    status: 'Paid',
+    method: 'UPI'
+  },
+  {
+    _id: ObjectId('67ee1071d5b35e1b0e6b1417'),
+    pay_id: 90743,
+    o_id: 1020,
+    amount: 200,
+    status: 'Pending',
+    method: 'Card'
+  }
+]
+
+4) TO VIEW A SPECIFIC VALUE IN THE USER OR ORDER OR PAYMENT OR PRODUCT
+Exercise-1> db.Users.find({name:"Kathir"});
+[
+  {
+    _id: ObjectId('67ee0db1d5b35e1b0e6b140b'),
+    u_id: 1,
+    name: 'Kathir',
+    city: 'Madurai'
+  }
+]
+Exercise-1> db.Orders.find({u_id:2});
+[
+  {
+    _id: ObjectId('67ee0f9ad5b35e1b0e6b1410'),
+    o_id: 1000,
+    u_id: 2,
+    p_id: 101,
+    qty: 3,
+    status: 'Pending'
+  },
+  {
+    _id: ObjectId('67ee0f9ad5b35e1b0e6b1411'),
+    o_id: 1005,
+    u_id: 2,
+    p_id: 103,
+    qty: 25,
+    status: 'Delivered'
+  }
+]
+
+5) UPDATE ORDER STATUS TO DELIVERED
+Exercise-1> db.Orders.updateOne({ o_id: 1000 }, { $set: { status: "Delivered" } });
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+TO CHECK IF IT IS UPDATED
+Exercise-1> db.Orders.find({o_id:1000});
+[
+  {
+    _id: ObjectId('67ee0f9ad5b35e1b0e6b1410'),
+    o_id: 1000,
+    u_id: 2,
+    p_id: 101,
+    qty: 3,
+    status: 'Delivered'
+  }
+]
+
+6) DECREASE STOCK AFTER PURCHASE
+Exercise-1> db.Products.updateOne({p_id:103},{$inc: {stock: -25}});
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+Exercise-1> db.Products.find({p_id:103});
+[
+  {
+    _id: ObjectId('67ee0e92d5b35e1b0e6b140f'),
+    p_id: 103,
+    name: 'Carrot',
+    price: 25,
+    category: 'Vegetables',
+    stock: 75
+  }
+]
+
+7) DELETE A USER IF NEEDED
+db.Users.deleteOne({u_id:1});
+
+8) DELETE AN ORDER IF CANCELLED
+db.Orders.deleteOne({o_id: 1005});
+
+
+

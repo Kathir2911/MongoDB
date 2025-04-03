@@ -596,4 +596,303 @@ Exercise-1> db.Users.find({name:{$regex:"ka",$options:"i"}});
   }
 ]
 
-26) 
+JOIN COLLECTIONS
+26) JOIN ORDER DETAILS WITH USER INFORMATION
+Exercise-1> db.Orders.aggregate([ { $lookup: { from: "Users", localField: "u_id", foreignField: "u_id", as: "user" } }, { $unwind: "$user" }, { $project: { _id: 0, "user.name": 1, p_id: 1, qty: 1, status: 1, "user.city": 1 } }] );
+[
+  {
+    p_id: 101,
+    qty: 3,
+    status: 'Delivered',
+    user: { name: 'Jeeva', city: 'Paramakudi' }
+  },
+  {
+    p_id: 103,
+    qty: 25,
+    status: 'Delivered',
+    user: { name: 'Jeeva', city: 'Paramakudi' }
+  },
+  {
+    p_id: 101,
+    qty: 2,
+    status: 'Shipped',
+    user: { name: 'Arun', city: 'Chennai' }
+  },
+  {
+    p_id: 104,
+    qty: 4,
+    status: 'Pending',
+    user: { name: 'Ravi', city: 'Trichy' }
+  }
+]
+$UNWIND- USED TO FLATTEN THE ARRAY
+
+$LOOKUP- This performs a left outer join between the Orders collection and the Users collection based on u_id.
+
+In a $project stage, a value of 1 includes a field in the output, while a value of 0 excludes it.
+
+Flattening an array means converting an array of objects into individual documents by breaking it apart. In MongoDB, this is often done using $unwind.
+
+27) SEPERATING USER NAME CITY SEPERATE
+Exercise-1> db.Orders.aggregate([
+... {
+... $lookup:{
+... from:"Users",
+... localField:"u_id",
+... foreignField:"u_id",
+... as:"users"
+... }
+... },
+... {
+... $unwind:
+... "$users"},
+... {
+... $project:{
+... _id:0,
+... name:"$users.name",   // Extract 'name' from 'user' object
+... city:"$users.city",
+... p_id:1,
+... qty:1,
+... status:1}
+... }
+... ]);
+[
+  {
+    p_id: 101,
+    qty: 3,
+    status: 'Delivered',
+    name: 'Jeeva',
+    city: 'Paramakudi'
+  },
+  {
+    p_id: 103,
+    qty: 25,
+    status: 'Delivered',
+    name: 'Jeeva',
+    city: 'Paramakudi'
+  },
+  {
+    p_id: 101,
+    qty: 2,
+    status: 'Shipped',
+    name: 'Arun',
+    city: 'Chennai'
+  },
+  {
+    p_id: 104,
+    qty: 4,
+    status: 'Pending',
+    name: 'Ravi',
+    city: 'Trichy'
+  }
+]
+HERE $ REFERS TO EXTRACTION
+
+28)IF UNWIND IS ABSENT THE ABOVE MAKE THE NAME AND CITY AS ARRAY
+Exercise-1> db.Orders.aggregate([ { $lookup: { from: "Users", localField: "u_id", foreignField: "u_id", as: "users" } }, { $project: { _id: 0, name: "$users.name", city: "$users.city", p_id: 1, qty: 1, status: 1 } }] );
+[
+  {
+    p_id: 101,
+    qty: 3,
+    status: 'Delivered',
+    name: [ 'Jeeva' ],
+    city: [ 'Paramakudi' ]
+  },
+  {
+    p_id: 103,
+    qty: 25,
+    status: 'Delivered',
+    name: [ 'Jeeva' ],
+    city: [ 'Paramakudi' ]
+  },
+  { p_id: 2, qty: 1, status: 'Pending', name: [], city: [] },
+  {
+    p_id: 101,
+    qty: 2,
+    status: 'Shipped',
+    name: [ 'Arun' ],
+    city: [ 'Chennai' ]
+  },
+  {
+    p_id: 104,
+    qty: 4,
+    status: 'Pending',
+    name: [ 'Ravi' ],
+    city: [ 'Trichy' ]
+  }
+]
+
+29) IF I REMOVE UNWIND IN 26
+Exercise-1> db.Orders.aggregate([ { $lookup: { from: "Users", localField: "u_id", foreignField: "u_id", as: "user" } }, { $project: { _id: 0, "user.name": 1, p_id: 1, qty: 1, status: 1, "user.city": 1 } }] );
+[
+  {
+    p_id: 101,
+    qty: 3,
+    status: 'Delivered',
+    user: [ { name: 'Jeeva', city: 'Paramakudi' } ]
+  },
+  {
+    p_id: 103,
+    qty: 25,
+    status: 'Delivered',
+    user: [ { name: 'Jeeva', city: 'Paramakudi' } ]
+  },
+  { p_id: 2, qty: 1, status: 'Pending', user: [] },
+  {
+    p_id: 101,
+    qty: 2,
+    status: 'Shipped',
+    user: [ { name: 'Arun', city: 'Chennai' } ]
+  },
+  {
+    p_id: 104,
+    qty: 4,
+    status: 'Pending',
+    user: [ { name: 'Ravi', city: 'Trichy' } ]
+  }
+]
+
+30) USAGE OF GROUP BY
+Exercise-1> db.Orders.aggregate([
+... {
+... $group:{
+... _id:"$u_id",
+... totalOrders:{$sum:1}
+... }
+... }
+... ]);
+[
+  { _id: 3, totalOrders: 1 },
+  { _id: 1, totalOrders: 1 },
+  { _id: 2, totalOrders: 2 },
+  { _id: 5, totalOrders: 1 }
+]
+WHERE ID IS THE USER ID TOTAL ORDERS IS THE NUMBER OF ORDERS TAKEN SO FAR.
+
+31) IF I WANT TO CHANGE _ID INTO SOMEWHAT MEANINGFUL
+Exercise-1> db.Orders.aggregate([
+... {
+... $group:{
+... _id:"$u_id",
+... totalOrder:{$sum:1}
+... }
+... },
+... {
+... $project:
+... {
+... userId:"$_id",
+... _id:0,
+... totalOrder:1
+... }
+... }
+... ]);
+[
+  { totalOrder: 1, userId: 1 },
+  { totalOrder: 1, userId: 3 },
+  { totalOrder: 2, userId: 2 },
+  { totalOrder: 1, userId: 5 }
+]
+32) SORT ORDERS BY QUANTITY IN DESCENDING ORDER
+Exercise-1> db.Orders.aggregate([
+... {
+... $sort:{qty:-1}
+... }
+... ]);
+[
+  {
+    _id: ObjectId('67ee0f9ad5b35e1b0e6b1411'),
+    o_id: 1005,
+    u_id: 2,
+    p_id: 103,
+    qty: 25,
+    status: 'Delivered'
+  },
+  {
+    _id: ObjectId('67ee0f9ad5b35e1b0e6b1414'),
+    o_id: 1020,
+    u_id: 5,
+    p_id: 104,
+    qty: 4,
+    status: 'Pending'
+  },
+  {
+    _id: ObjectId('67ee0f9ad5b35e1b0e6b1410'),
+    o_id: 1000,
+    u_id: 2,
+    p_id: 101,
+    qty: 3,
+    status: 'Delivered'
+  },
+  {
+    _id: ObjectId('67ee0f9ad5b35e1b0e6b1413'),
+    o_id: 1015,
+    u_id: 3,
+    p_id: 101,
+    qty: 2,
+    status: 'Shipped'
+  },
+  {
+    _id: ObjectId('67ee0f9ad5b35e1b0e6b1412'),
+    o_id: 1010,
+    u_id: 1,
+    p_id: 2,
+    qty: 1,
+    status: 'Pending'
+  }
+]
+
+33) SORT ORDERS BY QUANTITY BUT INCLUDE ONLY O_ID AND QTY,P_ID
+Exercise-1> db.Orders.aggregate([
+... {
+... $sort:{qty:-1}
+... },
+... {
+... $project:
+... {
+... qty:1,
+... o_id:1,
+... o_id:1
+... }
+... }
+... ]);
+[
+  { _id: ObjectId('67ee0f9ad5b35e1b0e6b1411'), o_id: 1005, qty: 25 },
+  { _id: ObjectId('67ee0f9ad5b35e1b0e6b1414'), o_id: 1020, qty: 4 },
+  { _id: ObjectId('67ee0f9ad5b35e1b0e6b1410'), o_id: 1000, qty: 3 },
+  { _id: ObjectId('67ee0f9ad5b35e1b0e6b1413'), o_id: 1015, qty: 2 },
+  { _id: ObjectId('67ee0f9ad5b35e1b0e6b1412'), o_id: 1010, qty: 1 }
+]
+
+34)SORT ORDER BY QUANTITY ASCENDING ORDER
+Exercise-1> db.Orders.aggregate([ { $sort: { qty: 1 } }, { $project: { qty: 1, o_id: 1, o_id: 1,_id:0 } }] );
+[
+  { o_id: 1010, qty: 1 },
+  { o_id: 1015, qty: 2 },
+  { o_id: 1000, qty: 3 },
+  { o_id: 1020, qty: 4 },
+  { o_id: 1005, qty: 25 }
+]
+
+35) FILTER AND AGGREGATION ($match + $group)
+TOTAL SALES FOR ONLY DELIVERED ORDERS
+Exercise-1> db.Orders.aggregate([
+... {
+... $match:{status:"Delivered"}
+... },
+... {
+... $group:{
+... _id:null,
+... totalSales:{$sum:"$qty"}
+... }
+... }
+... ]);
+[ { _id: null, totalSales: 28 } ]
+
+Using $group to Aggregate Data
+
+Using $project to Modify Fields
+
+Use $group when you need aggregation operations (e.g., sum, count, average).
+
+Use $project when you want to select, rename, or modify fields in each document.
+

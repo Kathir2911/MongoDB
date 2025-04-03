@@ -896,3 +896,96 @@ Use $group when you need aggregation operations (e.g., sum, count, average).
 
 Use $project when you want to select, rename, or modify fields in each document.
 
+36) EXPORT COLLECTIONS AS JSON FILE USING TERMINAL (NOT MONGOSH)
+kathir@KathirLinux:~$ mongoexport --db=Exercise-1 --collection=Users --out=Users.json --jsonArray
+2025-04-03T22:37:56.295+0530	connected to: mongodb://localhost/
+2025-04-03T22:37:56.305+0530	exported 5 records
+-------------------------------------------------------------------------------------------------------
+EXPORTING IN DOWNLOADS
+mongoexport --db=Exercise-1 --collection=Users --out=~/Downloads/Users.json --jsonArray
+--db=Exercise-1 → The database name is Exercise-1.
+
+--collection=CollectionName → Exports each collection separately.
+
+--out=FileName.json → Saves the exported data to a JSON file.
+
+--jsonArray → Ensures the exported data is in JSON array format.
+--------------------------------------------------------------------------------------------------------
+37) IMPORT COLLECTIONS AS JSON FILE USING TERMINAL
+//FIRST I DELETE THE USER COLLECTION AND SECOND IMPORT USER COLLECTION AND CHECK IF USER COLLECTION PRESENT
+test> use Exercise-1;
+switched to db Exercise-1
+Exercise-1> db.Users.drop();
+true
+Exercise-1> db.Users.find();
+
+Exercise-1> exit
+kathir@KathirLinux:~$ mongoimport --db=Exercise-1 --collection=Users --file=Users.json --jsonArray;
+2025-04-03T22:43:56.480+0530	connected to: mongodb://localhost/
+2025-04-03T22:43:56.561+0530	5 document(s) imported successfully. 0 document(s) failed to import.
+kathir@KathirLinux:~$ mongosh
+Current Mongosh Log ID:	67eec1dddd417d83f96b140a
+Connecting to:		mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.4.2
+Using MongoDB:		8.0.6
+Using Mongosh:		2.4.2
+
+For mongosh info see: https://www.mongodb.com/docs/mongodb-shell/
+
+------
+   The server generated these startup warnings when booting
+   2025-04-03T17:49:04.127+05:30: Using the XFS filesystem is strongly recommended with the WiredTiger storage engine. See http://dochub.mongodb.org/core/prodnotes-filesystem
+   2025-04-03T17:49:04.600+05:30: Access control is not enabled for the database. Read and write access to data and configuration is unrestricted
+   2025-04-03T17:49:04.600+05:30: For customers running the current memory allocator, we suggest changing the contents of the following sysfsFile
+   2025-04-03T17:49:04.600+05:30: For customers running the current memory allocator, we suggest changing the contents of the following sysfsFile
+   2025-04-03T17:49:04.600+05:30: We suggest setting the contents of sysfsFile to 0.
+   2025-04-03T17:49:04.600+05:30: We suggest setting swappiness to 0 or 1, as swapping can cause performance problems.
+------
+
+test> use Exercise-1;
+switched to db Exercise-1
+Exercise-1> db.Users.find();
+[
+  {
+    _id: ObjectId('67ee0db1d5b35e1b0e6b140b'),
+    name: 'Kathir',
+    city: 'Paramakudi',
+    age: 34
+  },
+  {
+    _id: ObjectId('67ee0db1d5b35e1b0e6b140c'),
+    u_id: 2,
+    name: 'Jeeva',
+    city: 'Paramakudi'
+  },
+  {
+    _id: ObjectId('67ee0db1d5b35e1b0e6b140d'),
+    u_id: 3,
+    name: 'Arun',
+    city: 'Chennai'
+  },
+  {
+    _id: ObjectId('67ee0db1d5b35e1b0e6b140e'),
+    u_id: 4,
+    name: 'Mohan',
+    city: 'Coimbatore'
+  },
+  {
+    _id: ObjectId('67ee0db1d5b35e1b0e6b140f'),
+    u_id: 5,
+    name: 'Ravi',
+    city: 'Trichy'
+  }
+]
+
+
+38) IMPORT A CSV AS HEADLINE IN MONGODB
+mongoimport --db=Exercise-1 --collection=Users --type=csv --file=users.csv --headerline
+--db=Exercise-1 → Database name.
+
+--collection=Users → Collection where data will be inserted.
+
+--type=csv → Specifies that the file is CSV.
+
+--file=users.csv → Path to your CSV file.
+
+--headerline → Uses the first row as field names.

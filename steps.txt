@@ -989,3 +989,12 @@ mongoimport --db=Exercise-1 --collection=Users --type=csv --file=users.csv --hea
 --file=users.csv → Path to your CSV file.
 
 --headerline → Uses the first row as field names.
+
+39) COMBINATION OF GROUP BY, LOOKUP, SORT AGGREGATE FUNCTIONS
+TOTAL REVENUE FROM EACH PRODUCT
+Exercise-1> db.Orders.aggregate([ { $lookup: { from: "Products", localField: "p_id", foreignField: "p_id", as: "product_details" } }, { $unwind: "$product_details" }, { $group: { _id: "$p_id", totalRevenue: { $sum: { $multiply: ["$qty", "$product_details.price"] } } } }, { $sort: { totalRevenue: -1 } }] );
+[
+  { _id: 103, totalRevenue: 3125 },
+  { _id: 104, totalRevenue: 600 },
+  { _id: 101, totalRevenue: 600 }
+]

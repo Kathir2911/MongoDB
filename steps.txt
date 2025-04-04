@@ -998,3 +998,7 @@ Exercise-1> db.Orders.aggregate([ { $lookup: { from: "Products", localField: "p_
   { _id: 104, totalRevenue: 600 },
   { _id: 101, totalRevenue: 600 }
 ]
+
+The $lookup stage is used to perform a left outer join between two collections.
+The $group stage is used to group documents together and perform aggregations (like COUNT, SUM, AVG).
+The $sort stage is used to sort documents in ascending (1) or descending (-1) order.

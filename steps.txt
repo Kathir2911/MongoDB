@@ -1017,3 +1017,4 @@ studentInfo> db.Student.find({$or:[{course:"Mathematics"},{course:"Physics"}]});
 The $lookup stage is used to perform a left outer join between two collections.
 The $group stage is used to group documents together and perform aggregations (like COUNT, SUM, AVG).
 The $sort stage is used to sort documents in ascending (1) or descending (-1) order.
+_id is object name otherwise called as Primary Key.

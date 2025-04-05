@@ -1013,6 +1013,42 @@ studentInfo> db.Student.find({$or:[{course:"Mathematics"},{course:"Physics"}]});
   { _id: 5, name: 'David', age: 25, course: 'Mathematics', marks: 95 }
 ]
 
+41) USAGE OF SORT AND LIMIT
+eCommerce> db.Products.find().sort({name:-1});
+[
+  {
+    _id: 3,
+    name: 'T-shirt',
+    category: 'Clothing',
+    price: 20,
+    stock: 200
+  },
+  {
+    _id: 2,
+    name: 'Smartphone',
+    category: 'Electronics',
+    price: 700,
+    stock: 100
+  },
+  {
+    _id: 1,
+    name: 'Laptop',
+    category: 'Electronics',
+    price: 1000,
+    stock: 50
+  }
+]
+
+eCommerce> db.Products.find().sort({name:-1}).limit(1);
+[
+  {
+    _id: 3,
+    name: 'T-shirt',
+    category: 'Clothing',
+    price: 20,
+    stock: 200
+  }
+]
 
 The $lookup stage is used to perform a left outer join between two collections.
 The $group stage is used to group documents together and perform aggregations (like COUNT, SUM, AVG).

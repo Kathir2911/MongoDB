@@ -999,6 +999,21 @@ Exercise-1> db.Orders.aggregate([ { $lookup: { from: "Products", localField: "p_
   { _id: 101, totalRevenue: 600 }
 ]
 
+40) FIND THE COURSE WHO HAVE TAKE MATHEMATICS OR PHYSICS
+studentInfo> db.Student.find({course:{$in:["Mathematics","Physics"]}});
+[
+  { _id: 1, name: 'John', age: 22, course: 'Mathematics', marks: 85 },
+  { _id: 2, name: 'Alice', age: 23, course: 'Physics', marks: 90 },
+  { _id: 5, name: 'David', age: 25, course: 'Mathematics', marks: 95 }
+]
+studentInfo> db.Student.find({$or:[{course:"Mathematics"},{course:"Physics"}]});
+[
+  { _id: 1, name: 'John', age: 22, course: 'Mathematics', marks: 85 },
+  { _id: 2, name: 'Alice', age: 23, course: 'Physics', marks: 90 },
+  { _id: 5, name: 'David', age: 25, course: 'Mathematics', marks: 95 }
+]
+
+
 The $lookup stage is used to perform a left outer join between two collections.
 The $group stage is used to group documents together and perform aggregations (like COUNT, SUM, AVG).
 The $sort stage is used to sort documents in ascending (1) or descending (-1) order.

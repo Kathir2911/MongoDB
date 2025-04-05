@@ -1061,6 +1061,13 @@ db.Products.find({ category: "Clothing" })
         );
     });
 
+43)How does the  operator work in MongoDB, and what other mathematical operators can be used to modify field values?
+db.Products.updateMany(
+  { price: { $gte: 50, $lte: 500 } }, 
+  { $mul: { price: 0.95 } }
+);
+
+
 The $lookup stage is used to perform a left outer join between two collections.
 The $group stage is used to group documents together and perform aggregations (like COUNT, SUM, AVG).
 The $sort stage is used to sort documents in ascending (1) or descending (-1) order.

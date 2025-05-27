@@ -1,3 +1,4 @@
+Indroduction:
 1) TO CREATE THE DATABASE
 test> use Exercise-1;
 switched to db Exercise-1
